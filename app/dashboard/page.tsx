@@ -306,6 +306,26 @@ export default function DashboardPage() {
       errors.name = 'Name is required';
     }
     
+    // Date of Birth validation (compulsory)
+    if (!formData.dob || formData.dob.trim() === '') {
+      errors.dob = 'Date of birth is required';
+    } else {
+      const birthDate = new Date(formData.dob);
+      const today = new Date();
+      const age = today.getFullYear() - birthDate.getFullYear();
+      const monthDiff = today.getMonth() - birthDate.getMonth();
+      const dayDiff = today.getDate() - birthDate.getDate();
+      
+      // Adjust age if birthday hasn't occurred this year
+      if (monthDiff < 0 || (monthDiff === 0 && dayDiff < 0)) {
+        // age--;
+      }
+      
+      if (age < 13 || age > 120 || birthDate > today) {
+        errors.dob = 'Please enter a valid date of birth';
+      }
+    }
+    
     // Gender validation (compulsory)
     if (!formData.gender || formData.gender.trim() === '') {
       errors.gender = 'Gender is required';
@@ -321,6 +341,8 @@ export default function DashboardPage() {
     // About validation (compulsory)
     if (!formData.about || formData.about.trim() === '') {
       errors.about = 'About section is required';
+    } else if (formData.about.length < 10) {
+      errors.about = 'About section must be at least 10 characters';
     } else if (formData.about.length > 500) {
       errors.about = 'About section cannot exceed 500 characters';
     }
@@ -500,16 +522,16 @@ export default function DashboardPage() {
       <aside
         className={`
         fixed lg:static inset-y-0 left-0 z-50
-        w-64 bg-white shadow-sm
+        w-64 bg-white shadow-lg ultra-narrow:sidebar-compact tablet-landscape:sidebar-tablet
         transform transition-transform duration-300 ease-in-out
         ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
       `}
       >
         <div className="h-full flex flex-col">
           {/* Logo/Brand */}
-          <div className="px-6 py-6 flex items-start justify-between border-b">
-            <div className="flex items-start gap-3">
-              <div className="w-12 h-12 rounded-lg flex items-center justify-center overflow-hidden">
+          <div className="px-4 sm:px-6 py-4 sm:py-6 flex items-start justify-between border-b">
+            <div className="flex items-start gap-2 sm:gap-3">
+              <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg flex items-center justify-center overflow-hidden">
                 <Image 
                   src="/logo.svg" 
                   alt="Record Logo" 
@@ -519,27 +541,27 @@ export default function DashboardPage() {
                 />
               </div>
               <div className="flex flex-col">
-                <h1 className="text-2xl font-bold text-gray-800 leading-none">
+                <h1 className="text-xl sm:text-2xl font-bold text-gray-800 leading-none">
                   Record
                 </h1>
-                <p className="text-sm text-gray-500 mt-1">v1.0.1</p>
+                <p className="text-xs sm:text-sm text-gray-500 mt-1">v1.0.1</p>
               </div>
             </div>
             <button
               onClick={() => setIsSidebarOpen(false)}
-              className="lg:hidden text-gray-600"
+              className="lg:hidden text-gray-600 p-2 hover:bg-gray-100 rounded-lg"
             >
-              <FiX size={24} />
+              <FiX size={20} />
             </button>
           </div>
 
           {/* Navigation */}
-          <nav className="flex-1 p-4 space-y-1">
+          <nav className="flex-1 p-3 sm:p-4 space-y-1">
             {menuItems.map((item, index) => (
               <div key={index}>
                 <button
                   className={`
-                    w-full flex items-center gap-3 px-3 py-2 rounded cursor-pointer transition text-sm font-medium
+                    w-full flex items-center gap-2 sm:gap-3 px-2 sm:px-3 py-2 rounded cursor-pointer transition text-sm font-medium
                     ${
                       item.active
                         ? 'text-orange-500'
@@ -547,16 +569,16 @@ export default function DashboardPage() {
                     }
                   `}
                 >
-                  <item.icon size={18} />
-                  <span>{item.label}</span>
+                  <item.icon size={16} className="sm:w-[18px] sm:h-[18px]" />
+                  <span className="text-sm">{item.label}</span>
                 </button>
                 {item.submenu && (
-                  <div className="relative ml-9 mt-1 space-y-1 pl-3">
+                  <div className="relative ml-6 sm:ml-9 mt-1 space-y-1 pl-2 sm:pl-3">
                     <div className="absolute left-0 top-0 bottom-0 w-px bg-gray-300"></div>
                     {item.submenu.map((sub, idx) => (
                       <div
                         key={idx}
-                        className="relative text-sm text-gray-600 px-3 py-1 cursor-pointer hover:text-gray-900"
+                        className="relative text-xs sm:text-sm text-gray-600 px-2 sm:px-3 py-1 cursor-pointer hover:text-gray-900"
                       >
                         {sub}
                       </div>
@@ -568,19 +590,19 @@ export default function DashboardPage() {
           </nav>
 
           {/* Support Section */}
-          <div className="p-4 space-y-2 text-sm text-gray-600 border-t">
+          <div className="p-3 sm:p-4 space-y-2 text-sm text-gray-600 border-t">
             <div
-              className="flex items-center gap-2 cursor-pointer hover:text-gray-900"
+              className="flex items-center gap-2 cursor-pointer hover:text-gray-900 py-1"
               onClick={() => setIsSupportModalOpen(true)}
             >
-              <FiCalendar size={16} />
-              <span>Support</span>
+              <FiCalendar size={14} className="sm:w-4 sm:h-4" />
+              <span className="text-xs sm:text-sm">Support</span>
             </div>
-            <div className="flex items-center gap-2 cursor-pointer hover:text-gray-900">
-              <FiShare2 size={16} />
-              <span>Feedback</span>
+            <div className="flex items-center gap-2 cursor-pointer hover:text-gray-900 py-1">
+              <FiShare2 size={14} className="sm:w-4 sm:h-4" />
+              <span className="text-xs sm:text-sm">Feedback</span>
             </div>
-            <div className="mt-4 text-xs text-gray-400">
+            <div className="mt-3 sm:mt-4 text-xs text-gray-400">
               Privacy Policy | Terms & Conditions
               <br />© 2025 Record Innovation and
               <br />
@@ -593,36 +615,36 @@ export default function DashboardPage() {
       {/* Main Content */}
       <div className="flex-1 flex flex-col h-screen overflow-hidden">
         {/* Header */}
-        <header className="h-16 bg-white border-b flex items-center justify-between px-4 sm:px-6 md:px-8 flex-shrink-0">
-          <div className="flex items-center gap-4">
+        <header className="h-14 sm:h-16 bg-white border-b flex items-center justify-between px-3 sm:px-4 md:px-6 lg:px-8 flex-shrink-0">
+          <div className="flex items-center gap-2 sm:gap-4">
             <button
               onClick={() => setIsSidebarOpen(true)}
-              className="lg:hidden text-gray-600"
+              className="lg:hidden text-gray-600 p-2 hover:bg-gray-100 rounded-lg"
             >
-              <FiMenu size={24} />
+              <FiMenu size={20} />
             </button>
-            <h1 className="text-lg md:text-xl font-semibold">Profile</h1>
+            <h1 className="text-base sm:text-lg md:text-xl font-semibold">Profile</h1>
             <span className="text-gray-400 hidden sm:inline">›</span>
-            <span className="text-sm text-gray-600 hidden sm:inline">
+            <span className="text-xs sm:text-sm text-gray-600 hidden sm:inline">
               Basic Info
             </span>
           </div>
-          <div className="flex items-center gap-3">
-            <Button variant="outline" className="hidden sm:flex gap-2">
+          <div className="flex items-center gap-2 sm:gap-3">
+            <Button variant="outline" className="hidden sm:flex gap-2 text-xs sm:text-sm py-1.5 sm:py-2 px-2 sm:px-3">
               <svg
-                width="20"
-                height="20"
+                width="16"
+                height="16"
                 viewBox="0 0 24 24"
                 fill="currentColor"
-                className="text-purple-600"
+                className="text-purple-600 sm:w-5 sm:h-5"
               >
                 <path d="M12 2L9 9L2 9L7.5 13.5L5.5 21L12 16L18.5 21L16.5 13.5L22 9L15 9L12 2Z" />
               </svg>
-              <span>Premium</span>
+              <span className="hidden md:inline">Premium</span>
             </Button>
-            <Button size="icon" variant="orange" className="rounded">
+            <Button size="icon" variant="orange" className="rounded h-8 w-8 sm:h-10 sm:w-10">
               <svg
-                className="w-5 h-5"
+                className="w-4 h-4 sm:w-5 sm:h-5"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -635,18 +657,18 @@ export default function DashboardPage() {
                 />
               </svg>
             </Button>
-            <Button size="icon" variant="ghost">
-              <FiBell size={20} />
+            <Button size="icon" variant="ghost" className="h-8 w-8 sm:h-10 sm:w-10">
+              <FiBell size={16} className="sm:w-5 sm:h-5" />
             </Button>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button
                   variant="ghost"
-                  className="relative h-10 w-10 rounded-full p-0"
+                  className="relative h-8 w-8 sm:h-10 sm:w-10 rounded-full p-0"
                 >
-                  <Avatar className="h-10 w-10">
+                  <Avatar className="h-8 w-8 sm:h-10 sm:w-10">
                     <AvatarImage src={formData.profilePhoto} alt={formData.name} />
-                    <AvatarFallback>
+                    <AvatarFallback className="text-xs sm:text-sm">
                       {formData.name.substring(0, 2).toUpperCase()}
                     </AvatarFallback>
                   </Avatar>
@@ -674,16 +696,16 @@ export default function DashboardPage() {
         </header>
 
         {/* Content Area */}
-        <div className="flex-1 flex gap-6 p-4 sm:p-6 md:p-8 overflow-hidden">
+        <div className="flex-1 flex gap-3 sm:gap-4 lg:gap-6 p-3 sm:p-4 md:p-6 lg:p-8 overflow-hidden">
           {/* Left Sidebar - Profile Sections */}
-          <div className="hidden lg:block w-64 flex-shrink-0 overflow-y-auto">
+          <div className="hidden lg:block w-56 xl:w-64 flex-shrink-0 overflow-y-auto">
             <Card className="h-full">
-              <CardContent className="p-6">
-                <div className="text-center mb-8">
-                  <div className="relative w-24 h-24 mx-auto mb-3 group">
-                    <Avatar className="w-24 h-24">
+              <CardContent className="p-4 xl:p-6">
+                <div className="text-center mb-6 xl:mb-8">
+                  <div className="relative w-20 h-20 xl:w-24 xl:h-24 mx-auto mb-3 group">
+                    <Avatar className="w-20 h-20 xl:w-24 xl:h-24">
                       <AvatarImage src={formData.profilePhoto} alt={formData.name} />
-                      <AvatarFallback className="text-2xl">
+                      <AvatarFallback className="text-xl xl:text-2xl">
                         {formData.name.substring(0, 2).toUpperCase()}
                       </AvatarFallback>
                     </Avatar>
@@ -701,7 +723,7 @@ export default function DashboardPage() {
                         className="opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer flex flex-col items-center gap-1"
                       >
                         <svg
-                          className="w-6 h-6 text-white"
+                          className="w-5 h-5 xl:w-6 xl:h-6 text-white"
                           fill="none"
                           stroke="currentColor"
                           viewBox="0 0 24 24"
@@ -735,10 +757,10 @@ export default function DashboardPage() {
                       Remove Photo
                     </Button>
                   )}
-                  <h2 className="text-lg font-semibold mt-2">{formData.name}</h2>
+                  <h2 className="text-base xl:text-lg font-semibold mt-2">{formData.name}</h2>
                 </div>
 
-                <div className="space-y-6">
+                <div className="space-y-4 xl:space-y-6">
                   {profileSections.map((section, index) => (
                     <div
                       key={index}
@@ -761,21 +783,58 @@ export default function DashboardPage() {
 
           {/* Main Form */}
           <div className="flex-1 overflow-y-auto">
+            {/* Mobile Profile Sections - Show only on mobile/tablet */}
+            <div className="lg:hidden mb-4 sm:mb-6">
+              <Card>
+                <CardContent className="p-4">
+                  <div className="flex items-center gap-3 mb-4">
+                    <Avatar className="h-12 w-12">
+                      <AvatarImage src={formData.profilePhoto} alt={formData.name} />
+                      <AvatarFallback className="text-sm">
+                        {formData.name.substring(0, 2).toUpperCase()}
+                      </AvatarFallback>
+                    </Avatar>
+                    <div>
+                      <h3 className="font-medium text-gray-900">{formData.name}</h3>
+                      <p className="text-sm text-gray-500 truncate">{formData.email}</p>
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-2 gap-2">
+                    {profileSections.map((section, index) => (
+                      <button
+                        key={index}
+                        className={`
+                          p-2 text-xs sm:text-sm text-left rounded-lg transition-colors
+                          ${
+                            index === 0
+                              ? 'bg-orange-50 text-orange-600 font-medium'
+                              : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+                          }
+                        `}
+                      >
+                        {section}
+                      </button>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+
             <Card>
-              <CardHeader>
-                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+              <CardHeader className="p-4 sm:p-6">
+                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4">
                   <div>
-                    <CardTitle>Basic Profile</CardTitle>
-                    <CardDescription>
+                    <CardTitle className="text-lg sm:text-xl">Basic Profile</CardTitle>
+                    <CardDescription className="text-sm">
                       Information about your profile, including all your personal
                       details. You can also add your social media links to your
                       profile.
                     </CardDescription>
                   </div>
-                  <div className="flex items-center gap-3 w-full sm:w-auto">
+                  <div className="flex items-center gap-2 sm:gap-3 w-full sm:w-auto">
                     <Button 
                       variant="outline" 
-                      className="flex-1 sm:flex-initial"
+                      className="flex-1 sm:flex-initial text-sm py-2 px-3"
                       onClick={handleShare}
                     >
                       <FiShare2 className="mr-2 h-4 w-4" />
@@ -785,14 +844,84 @@ export default function DashboardPage() {
                       variant="orange"
                       onClick={handleSave}
                       disabled={isSaving}
-                      className="flex-1 sm:flex-initial"
+                      className="flex-1 sm:flex-initial text-sm py-2 px-3"
                     >
                       {isSaving ? 'Saving...' : 'Save'}
                     </Button>
                   </div>
                 </div>
               </CardHeader>
-              <CardContent className="space-y-6">
+              <CardContent className="space-y-4 sm:space-y-6 p-4 sm:p-6">
+                {/* Mobile Profile Photo Upload - Show only on mobile/tablet */}
+                <div className="lg:hidden">
+                  <Label className="text-sm font-medium">Profile Photo</Label>
+                  <div className="flex items-center gap-4 mt-2">
+                    <div className="relative group">
+                      <Avatar className="h-16 w-16">
+                        <AvatarImage src={formData.profilePhoto} alt={formData.name} />
+                        <AvatarFallback className="text-lg">
+                          {formData.name.substring(0, 2).toUpperCase()}
+                        </AvatarFallback>
+                      </Avatar>
+                      <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-50 rounded-full transition-all duration-200 flex items-center justify-center cursor-pointer">
+                        <input
+                          type="file"
+                          id="mobile-photo-upload"
+                          accept="image/jpeg,image/jpg,image/png,image/gif"
+                          onChange={handlePhotoChange}
+                          className="hidden"
+                          disabled={isUploadingPhoto}
+                        />
+                        <label
+                          htmlFor="mobile-photo-upload"
+                          className="opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer flex flex-col items-center gap-1"
+                        >
+                          <svg
+                            className="w-4 h-4 text-white"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"
+                            />
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"
+                            />
+                          </svg>
+                        </label>
+                      </div>
+                    </div>
+                    <div className="flex flex-col gap-2">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => document.getElementById('mobile-photo-upload')?.click()}
+                        disabled={isUploadingPhoto}
+                        className="text-sm"
+                      >
+                        {isUploadingPhoto ? 'Uploading...' : 'Change Photo'}
+                      </Button>
+                      {formData.profilePhoto && (
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={handleRemovePhoto}
+                          className="text-sm text-red-600 hover:text-red-700 hover:bg-red-50"
+                        >
+                          Remove
+                        </Button>
+                      )}
+                    </div>
+                  </div>
+                </div>
+
                 {/* Name & Email Row */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-2">
@@ -1046,7 +1175,7 @@ export default function DashboardPage() {
       {/* Mobile Sidebar Overlay */}
       {isSidebarOpen && (
         <div
-          className="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden"
+          className="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden transition-opacity duration-300"
           onClick={() => setIsSidebarOpen(false)}
         />
       )}

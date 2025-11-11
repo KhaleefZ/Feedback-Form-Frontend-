@@ -57,3 +57,45 @@
     @apply bg-background text-foreground;
   }
 }
+
+@layer utilities {
+  /* Split-screen optimizations for narrow viewports */
+  @media (min-width: 400px) and (max-width: 767px) {
+    .split-optimize {
+      @apply px-2 text-sm;
+    }
+    .split-optimize .card-padding {
+      @apply p-4;
+    }
+  }
+
+  /* Ultra-narrow viewport optimizations */
+  @media (max-width: 399px) {
+    .ultra-narrow {
+      @apply text-xs px-1;
+    }
+    .ultra-narrow .btn-compact {
+      @apply py-1.5 px-2 text-xs;
+    }
+    .ultra-narrow .sidebar-compact {
+      @apply w-56;
+    }
+  }
+
+  /* Tablet landscape optimizations */
+  @media (min-width: 768px) and (max-width: 1023px) and (orientation: landscape) {
+    .tablet-landscape {
+      @apply text-sm;
+    }
+    .tablet-landscape .sidebar-tablet {
+      @apply w-60;
+    }
+  }
+
+  /* Split-screen modal adjustments */
+  @media (max-width: 500px) {
+    .modal-split {
+      @apply mx-2 w-[calc(100vw-1rem)] max-h-[85vh];
+    }
+  }
+}

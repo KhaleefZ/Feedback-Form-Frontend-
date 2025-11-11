@@ -199,12 +199,12 @@ export default function SupportModal({
 
   return (
     <Dialog open={isOpen} onOpenChange={submitSuccess ? undefined : handleClose}>
-      <DialogContent className="sm:max-w-[500px] max-h-[90vh] overflow-y-auto">
+      <DialogContent className="sm:max-w-[500px] max-h-[90vh] overflow-y-auto mx-4 w-[calc(100vw-2rem)] sm:w-full modal-split">
         {submitSuccess ? (
           <>
             <button
               onClick={handleSuccessClose}
-              className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground"
+              className="absolute right-3 sm:right-4 top-3 sm:top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground"
             >
               <svg
                 className="h-4 w-4"
@@ -221,16 +221,16 @@ export default function SupportModal({
               </svg>
               <span className="sr-only">Close</span>
             </button>
-            <div className="py-8 px-6 text-center">
-              <h3 className="text-xl font-semibold text-gray-900 mb-4">
+            <div className="py-6 sm:py-8 px-4 sm:px-6 text-center">
+              <h3 className="text-lg sm:text-xl font-semibold text-gray-900 mb-3 sm:mb-4">
                 Your support request has been submitted!
               </h3>
-              <p className="text-sm text-gray-600 mb-8">
+              <p className="text-sm text-gray-600 mb-6 sm:mb-8">
                 Sit back and relax, our team will review your request and resolve your issue shortly.
               </p>
               <Button
                 onClick={handleSuccessClose}
-                className="bg-orange-500 hover:bg-orange-600 text-white px-8"
+                className="bg-orange-500 hover:bg-orange-600 text-white px-6 sm:px-8 py-2 text-sm sm:text-base"
               >
                 Done
               </Button>
@@ -238,22 +238,22 @@ export default function SupportModal({
           </>
         ) : (
           <>
-            <DialogHeader>
-              <DialogTitle>We&#39;re here to help!</DialogTitle>
-              <DialogDescription>
+            <DialogHeader className="px-4 sm:px-6 pt-4 sm:pt-6">
+              <DialogTitle className="text-lg sm:text-xl">We&#39;re here to help!</DialogTitle>
+              <DialogDescription className="text-sm text-gray-600">
                 Share your issue in detail so we can resolve it quickly.
               </DialogDescription>
             </DialogHeader>
             <form onSubmit={handleSubmit}>
-            <div className="space-y-4 py-4">
+            <div className="space-y-4 py-4 px-4 sm:px-6">
               {errors.submit && (
                 <div className="p-3 text-sm text-red-500 bg-red-50 border border-red-200 rounded-md">
                   {errors.submit}
                 </div>
               )}
 
-              <div className="space-y-2">
-                <Label htmlFor="subject">
+              <div className="space-y-1.5 sm:space-y-2">
+                <Label htmlFor="subject" className="text-sm font-medium">
                   Subject <span className="text-red-500">*</span>
                 </Label>
                 <Input
@@ -263,15 +263,15 @@ export default function SupportModal({
                   onChange={handleChange}
                   placeholder="Type a short summary of your issue"
                   maxLength={100}
-                  className={errors.subject ? 'border-red-500' : ''}
+                  className={`text-sm sm:text-base ${errors.subject ? 'border-red-500' : ''}`}
                 />
                 {errors.subject && (
-                  <p className="text-sm text-red-500">{errors.subject}</p>
+                  <p className="text-xs sm:text-sm text-red-500">{errors.subject}</p>
                 )}
               </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="description">
+              <div className="space-y-1.5 sm:space-y-2">
+                <Label htmlFor="description" className="text-sm font-medium">
                   Describe your problem <span className="text-red-500">*</span>
                 </Label>
                 <Textarea
@@ -280,22 +280,22 @@ export default function SupportModal({
                   value={formData.description}
                   onChange={handleChange}
                   placeholder="Tell us what happened in detail"
-                  rows={5}
+                  rows={4}
                   maxLength={1000}
-                  className={errors.description ? 'border-red-500' : ''}
+                  className={`text-sm sm:text-base resize-none ${errors.description ? 'border-red-500' : ''}`}
                 />
                 {errors.description && (
-                  <p className="text-sm text-red-500">{errors.description}</p>
+                  <p className="text-xs sm:text-sm text-red-500">{errors.description}</p>
                 )}
               </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="screenshot">
+              <div className="space-y-1.5 sm:space-y-2">
+                <Label htmlFor="screenshot" className="text-sm font-medium">
                   Add Screenshot / File
                 </Label>
                 <div className="space-y-2">
                   {!screenshot ? (
-                    <div className="border-2 border-dashed rounded-md p-6 text-center hover:border-gray-400 transition-colors">
+                    <div className="border-2 border-dashed rounded-md p-4 sm:p-6 text-center hover:border-gray-400 transition-colors">
                       <input
                         id="screenshot"
                         name="screenshot"
@@ -305,9 +305,9 @@ export default function SupportModal({
                         className="hidden"
                       />
                       <label htmlFor="screenshot" className="cursor-pointer">
-                        <div className="flex flex-col items-center gap-2">
+                        <div className="flex flex-col items-center gap-1 sm:gap-2">
                           <svg
-                            className="w-10 h-10 text-gray-400"
+                            className="w-8 h-8 sm:w-10 sm:h-10 text-gray-400"
                             fill="none"
                             stroke="currentColor"
                             viewBox="0 0 24 24"
@@ -319,18 +319,18 @@ export default function SupportModal({
                               d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
                             />
                           </svg>
-                          <div className="text-sm text-gray-600">
+                          <div className="text-xs sm:text-sm text-gray-600">
                             <span className="font-medium text-primary">Drag & drop files here or click to browse</span>
                           </div>
                         </div>
                       </label>
                     </div>
                   ) : (
-                    <div className="border rounded-md p-3 bg-gray-50">
+                    <div className="border rounded-md p-2 sm:p-3 bg-gray-50">
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-2">
                           <svg
-                            className="w-5 h-5 text-blue-600"
+                            className="w-4 h-4 sm:w-5 sm:h-5 text-blue-600"
                             fill="none"
                             stroke="currentColor"
                             viewBox="0 0 24 24"
@@ -343,7 +343,7 @@ export default function SupportModal({
                             />
                           </svg>
                           <div>
-                            <p className="text-sm font-medium">{screenshot.name}</p>
+                            <p className="text-xs sm:text-sm font-medium truncate max-w-48">{screenshot.name}</p>
                             <p className="text-xs text-gray-500">
                               {(screenshot.size / 1024).toFixed(2)} KB
                             </p>
@@ -354,29 +354,29 @@ export default function SupportModal({
                           variant="ghost"
                           size="sm"
                           onClick={removeScreenshot}
-                          className="text-red-600 hover:text-red-700 hover:bg-red-50"
+                          className="text-red-600 hover:text-red-700 hover:bg-red-50 p-1 sm:p-2"
                         >
-                          Remove
+                          <span className="text-xs sm:text-sm">Remove</span>
                         </Button>
                       </div>
                     </div>
                   )}
                   {errors.screenshot && (
-                    <p className="text-sm text-red-500">{errors.screenshot}</p>
+                    <p className="text-xs sm:text-sm text-red-500">{errors.screenshot}</p>
                   )}
                 </div>
               </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="contactNumber">
+              <div className="space-y-1.5 sm:space-y-2">
+                <Label htmlFor="contactNumber" className="text-sm font-medium">
                   Contact Number <span className="text-red-500">*</span>
                 </Label>
                 <div className="flex gap-2">
-                  <div className="w-20">
+                  <div className="w-16 sm:w-20">
                     <Input
                       value="+91"
                       disabled
-                      className="bg-gray-100 cursor-not-allowed text-center"
+                      className="bg-gray-100 cursor-not-allowed text-center text-sm"
                     />
                   </div>
                   <Input
@@ -387,23 +387,23 @@ export default function SupportModal({
                     onChange={handleChange}
                     placeholder="Phone number"
                     maxLength={10}
-                    className={`flex-1 ${errors.contactNumber ? 'border-red-500' : ''}`}
+                    className={`flex-1 text-sm sm:text-base ${errors.contactNumber ? 'border-red-500' : ''}`}
                   />
                 </div>
                 {errors.contactNumber && (
-                  <p className="text-sm text-red-500">{errors.contactNumber}</p>
+                  <p className="text-xs sm:text-sm text-red-500">{errors.contactNumber}</p>
                 )}
               </div>
 
-              <div className="text-sm text-gray-600">
+              <div className="text-xs sm:text-sm text-gray-600 bg-gray-50 p-3 rounded-md">
                 We&#39;ll reply to this support request at: <span className="font-medium">{userEmail}</span>
               </div>
             </div>
 
-            <DialogFooter>
+            <DialogFooter className="px-4 sm:px-6 pb-4 sm:pb-6">
               <Button
                 type="submit"
-                className="w-full bg-gray-400 hover:bg-gray-500 text-white"
+                className="w-full bg-gray-400 hover:bg-gray-500 text-white py-2 text-sm sm:text-base"
                 disabled={isSubmitting}
               >
                 {isSubmitting ? 'Submitting...' : 'Submit'}
